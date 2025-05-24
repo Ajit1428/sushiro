@@ -22,7 +22,7 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const apiUrl = 'http://localhost:3002';
+      const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URI;
       const response = await fetch(`${apiUrl}/api/auth/login`, {
         method: 'POST',
         headers: {
@@ -64,7 +64,7 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const apiUrl = 'http://localhost:3002';
+      const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URI;
       const response = await fetch(`${apiUrl}/api/auth/verify-code`, {
         method: 'POST',
         headers: {
@@ -103,7 +103,7 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const apiUrl ='http://localhost:3002';
+      const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URI;
       const response = await fetch(`${apiUrl}/api/auth/update-code`, {
         method: 'POST',
         headers: {
