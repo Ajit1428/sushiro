@@ -39,26 +39,78 @@ export default function SignUpPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setShowVerification(true);
-    setIsLoading(false);
-    // Handle signup logic here
-    console.log("Signup attempt:", formData);
+
+    try {
+      // Validate passwords match
+      if (formData.password !== formData.confirmPassword) {
+        throw new Error("Passwords do not match");
+      }
+
+      const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URI;
+      const response = await fetch(`${apiUrl}/api/auth/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          password: formData.password,
+          birthDate: formData.birthDate,
+          gender: formData.gender,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Signup failed');
+      }
+
+      // If signup is successful, show verification screen
+      setShowVerification(true);
+    } catch (error) {
+      // Handle error - you might want to show this to the user
+      console.error('Signup error:', error);
+      alert(error instanceof Error ? error.message : 'An error occurred during signup');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleVerificationSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle verification logic here
-    console.log("Verification attempt:", { email: formData.email, verificationCode });
-    
-    // Simulate verification process
     setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setIsLoading(false);
-    
-    // Redirect to login page after successful verification
-    router.push('/login');
+
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URI;
+      const response = await fetch(`${apiUrl}/api/auth/save-code`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          verificationCode: verificationCode,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Verification failed');
+      }
+
+      // If verification is successful, redirect to login page
+      router.push('/login');
+    } catch (error) {
+      console.error('Verification error:', error);
+      alert(error instanceof Error ? error.message : 'An error occurred during verification');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
