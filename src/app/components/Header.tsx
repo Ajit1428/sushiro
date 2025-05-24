@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { FaHome, FaUser } from 'react-icons/fa';
+import { FaHome, FaUser, FaBriefcase } from 'react-icons/fa';
 import { GiSushis } from 'react-icons/gi';
 
 const Header = () => {
@@ -20,6 +20,9 @@ const Header = () => {
           <nav className="flex items-center justify-end space-x-6 w-full">
             <Link href="/" className="text-white text-2xl hover:bg-red-700 p-2 rounded-lg">
               <FaHome />
+            </Link>
+            <Link href="/jobs" className="text-white text-2xl hover:bg-red-700 p-2 rounded-lg">
+              <FaBriefcase />
             </Link>
             <Link href="/login" className="text-white text-2xl hover:bg-red-700 p-2 rounded-lg">
               <FaUser />
