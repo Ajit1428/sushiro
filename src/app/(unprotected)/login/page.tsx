@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Cookies from 'js-cookie';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -40,9 +41,17 @@ export default function LoginPage() {
         throw new Error(data.message || 'Login failed');
       }
 
-      localStorage.setItem('userInfo', JSON.stringify(data.user))
-        // If login is successful and no verification needed, redirect to job application
-        router.push('/job-application');
+      // Set both cookie and localStorage with consistent keys
+      const userInfo = JSON.stringify(data.user);
+      localStorage.setItem('userInfo', userInfo);
+      Cookies.set('userInfo', userInfo, { 
+        expires: 7, // 7 days
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict'
+      });
+
+      // If login is successful and no verification needed, redirect to job application
+      router.push('/job-application');
     } catch (error) {
       setError(error instanceof Error ? error.message : 'An error occurred during login');
     } finally {

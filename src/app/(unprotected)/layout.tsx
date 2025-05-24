@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
+import Cookies from 'js-cookie';
 
 export default function UnprotectedLayout({children}: {children: ReactNode}){
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -9,17 +10,24 @@ export default function UnprotectedLayout({children}: {children: ReactNode}){
   const router = useRouter();
 
   useEffect(() => {
-    const storedUserInfo = localStorage.getItem('userDetails');
-    if (storedUserInfo) {
-      try {
-        const parsedUserInfo = JSON.parse(storedUserInfo);
+    // Check both cookie and localStorage
+    const cookieUserInfo = Cookies.get('userInfo');
+    const storedUserInfo = localStorage.getItem('userInfo');
+    
+    try {
+      const userInfo = cookieUserInfo || storedUserInfo;
+      if (userInfo) {
+        const parsedUserInfo = JSON.parse(userInfo);
         setUserInfo(parsedUserInfo);
         if (parsedUserInfo.email) {
           router.push('/');
         }
-      } catch (error) {
-        console.error('Error parsing userInfo from localStorage:', error);
       }
+    } catch (error) {
+      console.error('Error parsing userInfo:', error);
+      // Clear invalid data
+      Cookies.remove('userInfo');
+      localStorage.removeItem('userInfo');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

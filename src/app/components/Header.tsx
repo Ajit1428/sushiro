@@ -4,29 +4,39 @@ import Link from 'next/link';
 import { FaHome, FaUser, FaBriefcase, FaSignOutAlt } from 'react-icons/fa';
 import { GiSushis } from 'react-icons/gi';
 import { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
 
 const Header = () => {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
-    const userInfo = localStorage.getItem('userInfo');
-    if (userInfo) {
-      try {
+    // Check both cookie and localStorage
+    const cookieUserInfo = Cookies.get('userInfo');
+    const storedUserInfo = localStorage.getItem('userInfo');
+    
+    try {
+      const userInfo = cookieUserInfo || storedUserInfo;
+      if (userInfo) {
         const parsedUserInfo = JSON.parse(userInfo);
         setUserEmail(parsedUserInfo.email || null);
-      } catch (error) {
-        console.error('Error parsing userInfo from localStorage:', error);
-        setUserEmail(null);
       }
+    } catch (error) {
+      console.error('Error parsing userInfo:', error);
+      // Clear invalid data
+      Cookies.remove('userInfo');
+      localStorage.removeItem('userInfo');
+      setUserEmail(null);
     }
   }, []);
 
   const handleLogout = () => {
+    // Clear both cookie and localStorage
+    Cookies.remove('userInfo');
     localStorage.removeItem('userInfo');
     setUserEmail(null);
     setShowDropdown(false);
-    // Optionally redirect to home page
+    // Redirect to home page
     window.location.href = '/';
   };
 
