@@ -3,8 +3,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
@@ -21,10 +23,18 @@ export default function LoginPage() {
     setIsLoading(false);
   };
 
-  const handleVerificationSubmit = (e: React.FormEvent) => {
+  const handleVerificationSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Handle verification logic here
     console.log("Verification attempt:", { email, verificationCode });
+    
+    // Simulate verification process
+    setIsLoading(true);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    setIsLoading(false);
+    
+    // Redirect to job application form after successful login
+    router.push('/job-application');
   };
 
   const handleVerificationCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {

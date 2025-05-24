@@ -57,8 +57,8 @@ export default function SignUpPage() {
     await new Promise(resolve => setTimeout(resolve, 1000));
     setIsLoading(false);
     
-    // Redirect to landing page after successful verification
-    router.push('/');
+    // Redirect to login page after successful verification
+    router.push('/login');
   };
 
   return (
