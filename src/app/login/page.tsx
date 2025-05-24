@@ -13,28 +13,41 @@ export default function LoginPage() {
   const [showVerification, setShowVerification] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setShowVerification(true);
-    setIsLoading(false);
-  };
+    setError(null);
 
-  const handleVerificationSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle verification logic here
-    console.log("Verification attempt:", { email, verificationCode });
-    
-    // Simulate verification process
-    setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setIsLoading(false);
-    
-    // Redirect to job application form after successful login
-    router.push('/job-application');
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URI;
+      const response = await fetch(`${apiUrl}/api/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
+      }
+
+   
+        // If login is successful and no verification needed, redirect to job application
+        router.push('/job-application');
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'An error occurred during login');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleVerificationCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,6 +88,11 @@ export default function LoginPage() {
           <div className="bg-white rounded-lg shadow-lg p-4 md:p-6 border border-gray-200">
             {!showVerification ? (
               <form onSubmit={handleSubmit} className="space-y-4">
+                {error && (
+                  <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+                    {error}
+                  </div>
+                )}
                 <input
                   type="text"
                   placeholder="Email address or phone number"
@@ -157,13 +175,18 @@ export default function LoginPage() {
                 </Link>
               </form>
             ) : (
-              <form onSubmit={handleVerificationSubmit} className="space-y-4">
+              <form className="space-y-4">
+                {error && (
+                  <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+                    {error}
+                  </div>
+                )}
                 <div className="text-center mb-4">
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">
                     Enter Security Code
                   </h3>
                   <p className="text-sm text-gray-600">
-                    We sent a security code to your phone number ending in {email.slice(-4)}
+                    We sent a security code to {email}
                   </p>
                 </div>
                 <input
@@ -186,17 +209,12 @@ export default function LoginPage() {
                   </button>
                   <button
                     type="button"
+                    onClick={handleSubmit}
                     className="text-red-600 hover:underline"
                   >
                     Get code again
                   </button>
                 </div>
-                <button
-                  type="submit"
-                  className="w-full bg-red-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-red-700 transition-colors"
-                >
-                  Continue
-                </button>
               </form>
             )}
           </div>

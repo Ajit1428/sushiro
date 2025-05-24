@@ -44,7 +44,7 @@ export default function Home() {
       </section>
 
       {/* About Section */}
-      <section className="py-20 px-4 bg-white">
+      <section className="py-20 px-4 bg-white text-black">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">The Secret to Our Great Taste</h2>
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -70,7 +70,7 @@ export default function Home() {
       </section>
 
       {/* Menu Highlights */}
-      <section id="menu-section" className="py-20 px-4 bg-gray-50 scroll-mt-16">
+      <section id="menu-section" className="py-20 px-4 bg-gray-50 scroll-mt-16 text-black">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Our Menu Highlights</h2>
           <div className="grid md:grid-cols-3 gap-8">
@@ -112,7 +112,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-4 bg-white">
+      <section className="py-20 px-4 bg-white text-black">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Why Choose Us</h2>
           <div className="grid md:grid-cols-3 gap-8">
