@@ -1,100 +1,168 @@
+'use client'
+
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const scrollToMenu = () => {
+    const menuSection = document.getElementById('menu-section');
+    menuSection?.scrollIntoView({ behavior: 'smooth' });
+  };
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="relative h-screen flex items-center justify-center bg-gray-900 text-white">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=1920&q=80"
+            alt="Restaurant background"
+            fill
+            className="object-cover opacity-50"
+            priority
+            unoptimized
+          />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+        <div className="relative z-10 text-center px-4">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6">SUSHIRO</h1>
+          <p className="text-xl md:text-2xl mb-8">Experience the Art of Japanese Cuisine</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button 
+              onClick={scrollToMenu}
+              className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-full text-lg transition-colors"
+            >
+              View Menu
+            </button>
+            <Link 
+              href="/login"
+              className="bg-white hover:bg-gray-100 text-gray-900 px-8 py-3 rounded-full text-lg transition-colors inline-flex items-center justify-center"
+            >
+              Apply for Job
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section className="py-20 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">The Secret to Our Great Taste</h2>
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6">
+              <p className="text-lg text-gray-700">
+                Industry-leading ingredients chosen for their freshness and quality are paired with rice prepared to exacting standards. Each dish is prepared in-house with the utmost care.
+              </p>
+              <p className="text-lg text-gray-700">
+                Our attention to detail extends to every aspect of your dining experience, from the soy sauce to the wasabi, ensuring authentic Japanese deliciousness that will amaze you.
+              </p>
+            </div>
+            <div className="relative h-[400px] rounded-lg overflow-hidden">
+              <Image
+                src="https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?auto=format&fit=crop&w=800&q=80"
+                alt="Sushi preparation"
+                fill
+                className="object-cover"
+                unoptimized
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Menu Highlights */}
+      <section id="menu-section" className="py-20 px-4 bg-gray-50 scroll-mt-16">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Our Menu Highlights</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { 
+                title: "Premium Sushi", 
+                image: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=600&q=80", 
+                price: "From ¥120" 
+              },
+              { 
+                title: "Special Rolls", 
+                image: "https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=600&q=80", 
+                price: "From ¥180" 
+              },
+              { 
+                title: "Side Dishes", 
+                image: "https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=600&q=80", 
+                price: "From ¥150" 
+              },
+            ].map((item, index) => (
+              <div key={index} className="bg-white rounded-lg overflow-hidden shadow-lg">
+                <div className="relative h-48">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
+                  <p className="text-red-600 font-medium">{item.price}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Why Choose Us</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Multilingual Support",
+                description: "Order with ease using our touch panel that supports multiple languages",
+                icon: "🌐"
+              },
+              {
+                title: "Cashless Payment",
+                description: "Convenient payment with credit cards and QR code options",
+                icon: "💳"
+              },
+              {
+                title: "Fresh Ingredients",
+                description: "Daily fresh ingredients sourced from trusted suppliers",
+                icon: "🐟"
+              }
+            ].map((feature, index) => (
+              <div key={index} className="text-center p-6">
+                <div className="text-4xl mb-4">{feature.icon}</div>
+                <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
+                <p className="text-gray-600">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div>
+              <h4 className="text-xl font-bold mb-4">SUSHIRO</h4>
+              <p className="text-gray-400">Experience authentic Japanese cuisine at its finest.</p>
+            </div>
+                       <div>
+              <h4 className="text-lg font-semibold mb-4">Contact</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li>Email: info@sushiro.com</li>
+                <li>Address: 1-1-1 Chiba Minato, Chuo-ku, Chiba-shi, Chiba 260-8722, Japan</li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+            <p>&copy; {new Date().getFullYear()} SUSHIRO. All rights reserved.</p>
+          </div>
+        </div>
       </footer>
     </div>
   );
