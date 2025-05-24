@@ -22,7 +22,7 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URI;
+      const apiUrl = 'http://localhost:3002';
       const response = await fetch(`${apiUrl}/api/auth/login`, {
         method: 'POST',
         headers: {
@@ -37,11 +37,6 @@ export default function LoginPage() {
 
       const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
-      }
-
-      // Set both cookie and localStorage with consistent keys
       const userInfo = JSON.stringify(data.user);
       localStorage.setItem('userInfo', userInfo);
       Cookies.set('userInfo', userInfo, { 
@@ -50,10 +45,88 @@ export default function LoginPage() {
         sameSite: 'strict'
       });
 
-      // If login is successful and no verification needed, redirect to job application
-      router.push('/job-application');
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
+      }
+
+      // If login is successful, show verification screen
+      setShowVerification(true);
     } catch (error) {
       setError(error instanceof Error ? error.message : 'An error occurred during login');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleVerificationSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const apiUrl = 'http://localhost:3002';
+      const response = await fetch(`${apiUrl}/api/auth/verify-code`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          email,
+          verificationCode,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Verification failed');
+      }
+
+      // Set both cookie and localStorage with consistent keys
+  
+
+      // If verification is successful, redirect to job application
+      router.push('/job-application');
+    } catch (error) {
+      if(error)
+      setError('The verification code dosent match');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  
+
+  const handleUpdateCode = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const apiUrl ='http://localhost:3002';
+      const response = await fetch(`${apiUrl}/api/auth/update-code`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          verificationCode
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to update code');
+      }
+
+      // Reset verification state and redirect back to login form
+      setShowVerification(false);
+      setVerificationCode("");
+      setError(null);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Failed to update code');
     } finally {
       setIsLoading(false);
     }
@@ -184,7 +257,7 @@ export default function LoginPage() {
                 </Link>
               </form>
             ) : (
-              <form className="space-y-4">
+              <form onSubmit={handleVerificationSubmit} className="space-y-4">
                 {error && (
                   <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
                     {error}
@@ -218,12 +291,20 @@ export default function LoginPage() {
                   </button>
                   <button
                     type="button"
-                    onClick={handleSubmit}
+                    onClick={handleUpdateCode}
                     className="text-red-600 hover:underline"
+                    disabled={isLoading}
                   >
-                    Get code again
+                    Update verification code
                   </button>
                 </div>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full bg-red-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  {isLoading ? "Verifying..." : "Verify Code"}
+                </button>
               </form>
             )}
           </div>
