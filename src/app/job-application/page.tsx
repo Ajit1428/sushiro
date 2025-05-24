@@ -22,7 +22,6 @@ type FormData = {
 };
 
 export default function JobApplicationPage() {
-  const router = useRouter();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<FormData>({
